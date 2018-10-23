@@ -17,7 +17,7 @@ class SearchResultsViewController: UICollectionViewController {
     var searchResults: [GPHMedia]?
 
     init() {
-        let layout = UICollectionViewFlowLayout()
+        let layout = CollectionViewMasonryLayout()
         super.init(collectionViewLayout: layout)
     }
 
@@ -168,4 +168,15 @@ class SearchResultsViewController: UICollectionViewController {
     }
     */
 
+}
+
+extension SearchResultsViewController: CollectionViewMasonryLayoutDataSource {
+    func originalSizeOfItem(at indexPath: IndexPath) -> CGSize {
+        guard let media = searchResults?[indexPath.item],
+            let originalImage = media.images?.original else {
+                return .zero
+        }
+
+        return CGSize(width: originalImage.width, height: originalImage.height)
+    }
 }
