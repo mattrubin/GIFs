@@ -86,6 +86,7 @@ class SearchResultsViewController: UICollectionViewController {
         collectionView.register(CollectionViewVideoCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         collectionView.alwaysBounceVertical = true
+        collectionView.indicatorStyle = .white
     }
 
     /*
