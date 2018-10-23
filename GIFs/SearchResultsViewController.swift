@@ -10,6 +10,9 @@ import UIKit
 import AVFoundation
 import GiphyCoreSDK
 
+/// The number of images to load per request.
+private let pageSize = 100
+
 private let reuseIdentifier = "Cell"
 
 class SearchResultsViewController: UICollectionViewController {
@@ -31,7 +34,7 @@ class SearchResultsViewController: UICollectionViewController {
         print("Searching for \"\(query)\"...")
         discardSearchOperationInProgress()
 
-        searchOperationInProgress = GiphyCore.shared.search(query) { [weak self] (response, error) in
+        searchOperationInProgress = GiphyCore.shared.search(query, limit: pageSize) { [weak self] (response, error) in
             if let error = error as NSError? {
                 // TODO: Better error handling.
                 print("error: \(error)")
