@@ -52,7 +52,10 @@ class CollectionViewMasonryLayout: UICollectionViewLayout {
         })
 
         // Compute the new layout.
-        computedLayout = ComputedLayout(bounds: collectionView.bounds, spacing: 8, itemSizes: itemSizes)
+        computedLayout = ComputedLayout(bounds: collectionView.bounds,
+                                        margins: collectionView.layoutMargins,
+                                        spacing: 8,
+                                        itemSizes: itemSizes)
     }
 
     override var collectionViewContentSize: CGSize {
@@ -91,14 +94,20 @@ private extension CollectionViewMasonryLayout {
         /// Layout attributes for all items, keyed by index path.
         let layoutAttributes: [IndexPath: UICollectionViewLayoutAttributes]
 
-        /// Given the collection view's current bounds, a spacing distance between items, and the original sizes of each
-        /// item, computes a masonry-style layout for the items.
-        init(bounds: CGRect, spacing: CGFloat, itemSizes: [[CGSize]]) {
+        // A magic number equivalent to 2 columns on the smallest supported screen width.
+        private let minimumColumnWidth: CGFloat = 148
+
+        /// Given the collection view's current bounds and layout margins, a spacing distance between items, and the
+        /// original sizes of each item, computes a masonry-style layout for the items.
+        init(bounds: CGRect, margins: UIEdgeInsets, spacing: CGFloat, itemSizes: [[CGSize]]) {
             boundsSize = bounds.size
 
-            let columnCount = 2 // TODO: dynamic column count based on view width.
-            let columnWidth = ((boundsSize.width - spacing) / CGFloat(columnCount)) - spacing
-            // TODO: ensure column width is positive.
+            // Calculate an appropriate number of columns for the collection view's bounds and margins.
+            let horizontalMargins = margins.left + margins.right
+            let rawColumnCount = (boundsSize.width - horizontalMargins + spacing) / (minimumColumnWidth + spacing)
+            // Ensure there is at least one column, even if its width is below our desired minimum.
+            let columnCount = rawColumnCount > 1 ? Int(rawColumnCount.rounded(.down)) : 1
+            let columnWidth = ((boundsSize.width - horizontalMargins + spacing) / CGFloat(columnCount)) - spacing
 
             /// An array containing the current maximum vertical offset of each column.
             var verticalOffsets = Array(repeating: spacing, count: columnCount)
@@ -136,7 +145,7 @@ private extension CollectionViewMasonryLayout {
 
                     // Find the current shortest column, and calculate a frame to add the item to that column.
                     let column = shortestColumn()
-                    let horizontalOffset = spacing + (CGFloat(column.index) * (columnWidth + spacing))
+                    let horizontalOffset = margins.left + (CGFloat(column.index) * (columnWidth + spacing))
                     let cellFrame = CGRect(
                         origin: CGPoint(x: horizontalOffset, y: column.verticalOffset),
                         size: cellSize
