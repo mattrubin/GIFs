@@ -28,6 +28,12 @@ class ViewController: UIViewController {
         definesPresentationContext = true
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        searchController.searchBar.becomeFirstResponder()
+    }
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         // When search is cancelled and the search results view controller is dismissed, the status bar style reverts to the style defined by this view controller, instead of reverting the status bar style defined by the navigation controller. Forcing the light content status bar style works around the bug.
         return .lightContent
