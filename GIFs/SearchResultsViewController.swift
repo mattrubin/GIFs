@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import GiphyCoreSDK
 
 private let reuseIdentifier = "Cell"
 
 class SearchResultsViewController: UICollectionViewController {
+    var searchOperationInProgress: Operation?
+    var searchResults: [GPHMedia]?
 
     init() {
         let layout = UICollectionViewFlowLayout()
@@ -25,12 +28,49 @@ class SearchResultsViewController: UICollectionViewController {
 
     func search(for query: String) {
         print("Searching for \"\(query)\"...")
-        // TODO: Search
+        discardSearchOperationInProgress()
+
+        searchOperationInProgress = GiphyCore.shared.search(query) { [weak self] (response, error) in
+            if let error = error as NSError? {
+                // TODO: Better error handling.
+                print("error: \(error)")
+            }
+
+            if let response = response, let data = response.data, let pagination = response.pagination {
+                // TODO: Check reponse metadata?
+                // TODO: Implement reponse pagination?
+                DispatchQueue.main.async {
+                    self?.update(with: data)
+                }
+            } else {
+                // TODO: Display a "no results" state in the UI.
+                print("No Results Found")
+            }
+        }
     }
 
     func clearResults() {
         print("Clearing search results...")
-        // TODO: Clear
+        discardSearchOperationInProgress()
+
+        self.searchResults = nil
+        self.collectionView.reloadData() // TODO: Use a more elegant update method.
+    }
+
+    private func discardSearchOperationInProgress() {
+        if let opInProgress = searchOperationInProgress {
+            if !opInProgress.isFinished {
+                print("Cancelling previous search...")
+                opInProgress.cancel()
+            }
+            searchOperationInProgress = nil
+        }
+    }
+
+    private func update(with searchResults: [GPHMedia]) {
+        print("Found \(searchResults.count) search results.")
+        self.searchResults = searchResults
+        self.collectionView.reloadData() // TODO: Use a more elegant update method.
     }
 
     // MARK: - View Lifecycle
@@ -38,13 +78,10 @@ class SearchResultsViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
         // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
-        // Do any additional setup after loading the view.
+        collectionView.alwaysBounceVertical = true
     }
 
     /*
@@ -60,19 +97,17 @@ class SearchResultsViewController: UICollectionViewController {
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return (searchResults == nil) ? 0 : 1
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+        return searchResults?.count ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
 
-        // Configure the cell
+        cell.contentView.backgroundColor = UIColor(white: 0.15, alpha: 1)
 
         return cell
     }
