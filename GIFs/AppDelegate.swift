@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let viewController = ViewController()
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.navigationBar.barStyle = .black
+        navigationController.navigationBar.prefersLargeTitles = true
 
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()

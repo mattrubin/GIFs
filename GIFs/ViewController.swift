@@ -16,9 +16,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        title = "GIFs"
+
         view.backgroundColor = .black
         searchController.searchBar.tintColor = .white
         searchController.searchBar.keyboardAppearance = .dark
+        searchController.searchBar.placeholder = "Search Giphy"
 
         searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
