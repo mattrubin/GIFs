@@ -12,7 +12,22 @@
 		C90987C2217FAAC80002128D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C90987C1217FAAC80002128D /* Assets.xcassets */; };
 		C90987C5217FAAC80002128D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C90987C3217FAAC80002128D /* LaunchScreen.storyboard */; };
 		C90987D2217FAE420002128D /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90987D1217FAE420002128D /* SearchResultsViewController.swift */; };
+		C90987DD217FB22E0002128D /* GiphyCoreSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C90987DB217FB21E0002128D /* GiphyCoreSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C90987D7217FB20E0002128D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C90987DD217FB22E0002128D /* GiphyCoreSDK.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C90987B7217FAAC80002128D /* GIFs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GIFs.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -23,6 +38,8 @@
 		C90987C6217FAAC80002128D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C90987D0217FAD040002128D /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
 		C90987D1217FAE420002128D /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
+		C90987D3217FB07F0002128D /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		C90987DB217FB21E0002128D /* GiphyCoreSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GiphyCoreSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +58,7 @@
 			children = (
 				C90987B9217FAAC80002128D /* GIFs */,
 				C90987CC217FABBC0002128D /* Tools */,
+				C90987D8217FB2140002128D /* Frameworks */,
 				C90987B8217FAAC80002128D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,9 +87,18 @@
 		C90987CC217FABBC0002128D /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				C90987D3217FB07F0002128D /* Cartfile */,
 				C90987D0217FAD040002128D /* .swiftlint.yml */,
 			);
 			name = Tools;
+			sourceTree = "<group>";
+		};
+		C90987D8217FB2140002128D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C90987DB217FB21E0002128D /* GiphyCoreSDK.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -85,6 +112,7 @@
 				C90987CF217FAC0E0002128D /* Lint Sources */,
 				C90987B4217FAAC80002128D /* Frameworks */,
 				C90987B5217FAAC80002128D /* Resources */,
+				C90987D7217FB20E0002128D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

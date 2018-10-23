@@ -1,0 +1,3 @@
+[submodule "Carthage/Checkouts/giphy-ios-sdk-core"]
+	path = Carthage/Checkouts/giphy-ios-sdk-core
+	url = https://github.com/Giphy/giphy-ios-sdk-core.git

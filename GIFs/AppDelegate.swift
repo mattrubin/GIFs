@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GiphyCoreSDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow? = UIWindow(frame: UIScreen.main.bounds)
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+        // Configure the Giphy API client with the required API key.
+        GiphyCore.configure(apiKey: "ZsUpUm2L6cVbvei347EQNp7HrROjbOdc")
 
         let viewController = ViewController()
         let navigationController = UINavigationController(rootViewController: viewController)
