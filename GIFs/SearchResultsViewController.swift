@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 import GiphyCoreSDK
 
 private let reuseIdentifier = "Cell"
@@ -79,7 +80,7 @@ class SearchResultsViewController: UICollectionViewController {
         super.viewDidLoad()
 
         // Register cell classes
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.register(CollectionViewVideoCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         collectionView.alwaysBounceVertical = true
     }
@@ -107,12 +108,38 @@ class SearchResultsViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
 
-        cell.contentView.backgroundColor = UIColor(white: 0.15, alpha: 1)
+        guard let media = searchResults?[indexPath.item] else {
+            // Cannot configure a cell for an item that doesn't exist.
+            return cell
+        }
+
+        if let videoCell = cell as? CollectionViewVideoCell {
+            if let previewImage = media.images?.preview,
+                let urlString = previewImage.mp4Url,
+                let url = URL(string: urlString) {
+                let asset = AVAsset(url: url)
+                let playerItem = AVPlayerItem(asset: asset)
+                let player = AVQueuePlayer(playerItem: playerItem)
+                videoCell.setPlayer(player)
+            }
+        }
 
         return cell
     }
 
     // MARK: UICollectionViewDelegate
+
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let videoCell = cell as? CollectionViewVideoCell {
+            videoCell.play()
+        }
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let videoCell = cell as? CollectionViewVideoCell {
+            videoCell.pause()
+        }
+    }
 
     /*
     // Uncomment this method to specify if the specified item should be highlighted during tracking

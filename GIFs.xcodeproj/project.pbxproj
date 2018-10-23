@@ -13,6 +13,7 @@
 		C90987C5217FAAC80002128D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C90987C3217FAAC80002128D /* LaunchScreen.storyboard */; };
 		C90987D2217FAE420002128D /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90987D1217FAE420002128D /* SearchResultsViewController.swift */; };
 		C90987DD217FB22E0002128D /* GiphyCoreSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C90987DB217FB21E0002128D /* GiphyCoreSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C90987DF217FB6540002128D /* CollectionViewVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90987DE217FB6540002128D /* CollectionViewVideoCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +41,7 @@
 		C90987D1217FAE420002128D /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		C90987D3217FB07F0002128D /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		C90987DB217FB21E0002128D /* GiphyCoreSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GiphyCoreSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C90987DE217FB6540002128D /* CollectionViewVideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewVideoCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 				C90987BA217FAAC80002128D /* AppDelegate.swift */,
 				C90987BC217FAAC80002128D /* ViewController.swift */,
 				C90987D1217FAE420002128D /* SearchResultsViewController.swift */,
+				C90987DE217FB6540002128D /* CollectionViewVideoCell.swift */,
 				C90987C1217FAAC80002128D /* Assets.xcassets */,
 				C90987C3217FAAC80002128D /* LaunchScreen.storyboard */,
 				C90987C6217FAAC80002128D /* Info.plist */,
@@ -196,6 +199,7 @@
 			files = (
 				C90987BD217FAAC80002128D /* ViewController.swift in Sources */,
 				C90987D2217FAE420002128D /* SearchResultsViewController.swift in Sources */,
+				C90987DF217FB6540002128D /* CollectionViewVideoCell.swift in Sources */,
 				C90987BB217FAAC80002128D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
