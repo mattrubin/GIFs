@@ -11,6 +11,7 @@ import AVFoundation
 
 class CollectionViewVideoCell: UICollectionViewCell {
     private let videoView = VideoView()
+    private var looper: AVPlayerLooper?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,9 +32,13 @@ class CollectionViewVideoCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         videoView.player = nil
+        looper = nil
     }
 
-    func setPlayer(_ player: AVPlayer) {
+    func setAsset(_ asset: AVAsset) {
+        let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: ["duration"])
+        let player = AVQueuePlayer(playerItem: playerItem)
+        looper = AVPlayerLooper(player: player, templateItem: playerItem)
         videoView.player = player
     }
 

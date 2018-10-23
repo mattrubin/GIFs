@@ -117,10 +117,8 @@ class SearchResultsViewController: UICollectionViewController {
             if let previewImage = media.images?.preview,
                 let urlString = previewImage.mp4Url,
                 let url = URL(string: urlString) {
-                let asset = AVAsset(url: url)
-                let playerItem = AVPlayerItem(asset: asset)
-                let player = AVQueuePlayer(playerItem: playerItem)
-                videoCell.setPlayer(player)
+                let asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+                videoCell.setAsset(asset)
             }
         }
 
