@@ -86,6 +86,7 @@ class SearchResultsViewController: UICollectionViewController {
 
         collectionView.alwaysBounceVertical = true
         collectionView.indicatorStyle = .white
+        collectionView.keyboardDismissMode = .onDrag
     }
 
     /*
