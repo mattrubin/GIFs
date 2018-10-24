@@ -35,7 +35,10 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        searchController.searchBar.becomeFirstResponder()
+        // If the search bar has no text, focus the search field when the view appears.
+        if searchController.searchBar.text?.isEmpty ?? true {
+            searchController.searchBar.becomeFirstResponder()
+        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
