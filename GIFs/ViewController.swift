@@ -12,6 +12,7 @@ class ViewController: UIViewController {
 
     lazy var searchResultsController = SearchResultsViewController()
     lazy var searchController = UISearchController(searchResultsController: searchResultsController)
+    lazy var giphy = GiphySearchController(delegate: searchResultsController)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,9 +47,9 @@ class ViewController: UIViewController {
 extension ViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-            searchResultsController.search(for: searchText)
+            giphy.search(for: searchText)
         } else {
-            searchResultsController.clearResults()
+            giphy.clearSearch()
         }
     }
 }

@@ -7,15 +7,10 @@
 //
 
 import UIKit
-import GiphyCoreSDK
-
-/// The number of images to load per request.
-private let pageSize = 100
 
 private let reuseIdentifier = "Cell"
 
 class SearchResultsViewController: UICollectionViewController {
-    var searchInProgress: (query: String, operation: Operation)?
     var searchResults: SearchResults?
 
     init() {
@@ -29,45 +24,7 @@ class SearchResultsViewController: UICollectionViewController {
 
     // MARK: - Search
 
-    func search(for query: String) {
-        if searchInProgress?.query == query {
-            // If the requested query matches the query of the in-progress search results, no changes are necessary.
-            print("Already searching for \"\(query)\".")
-            return
-        }
-        discardSearchInProgress()
-
-        if searchResults?.query == query {
-            // If the requested query matches the query of the already-loaded results, no API call is necessary.
-            print("Already showing results for \"\(query)\".")
-            return
-        }
-
-        print("Searching for \"\(query)\"...")
-        let searchOperation = GiphyCore.shared.search(query, limit: pageSize) { [weak self] (response, error) in
-            if let error = error as NSError? {
-                // TODO: Better error handling.
-                print("error: \(error)")
-            }
-
-            if let response = response, let data = response.data, let pagination = response.pagination {
-                // TODO: Check reponse metadata?
-                // TODO: Implement reponse pagination?
-                DispatchQueue.main.async {
-                    let searchResults = SearchResults(query: query, media: data)
-                    self?.update(with: searchResults)
-                }
-            } else {
-                // TODO: Display a "no results" state in the UI.
-                print("No Results Found")
-            }
-        }
-        searchInProgress = (query: query, operation: searchOperation)
-    }
-
-    func clearResults() {
-        discardSearchInProgress()
-
+    func clearSearchResults() {
         if searchResults != nil {
             print("Clearing search results...")
             self.searchResults = nil
@@ -75,17 +32,7 @@ class SearchResultsViewController: UICollectionViewController {
         }
     }
 
-    private func discardSearchInProgress() {
-        if let operationInProgress = searchInProgress?.operation {
-            if !operationInProgress.isFinished {
-                print("Cancelling previous search...")
-                operationInProgress.cancel()
-            }
-            searchInProgress = nil
-        }
-    }
-
-    private func update(with searchResults: SearchResults) {
+    func update(with searchResults: SearchResults) {
         print("Found \(searchResults.media.count) search results.")
         self.searchResults = searchResults
         self.collectionView.reloadData() // TODO: Use a more elegant update method.
@@ -176,6 +123,10 @@ class SearchResultsViewController: UICollectionViewController {
 
 }
 
+extension SearchResultsViewController: GiphySearchControllerDelegate {
+
+}
+
 extension SearchResultsViewController: CollectionViewMasonryLayoutDataSource {
     func originalSizeOfItem(at indexPath: IndexPath) -> CGSize {
         guard let media = searchResults?.media[indexPath.item],
@@ -185,9 +136,4 @@ extension SearchResultsViewController: CollectionViewMasonryLayoutDataSource {
 
         return CGSize(width: originalImage.width, height: originalImage.height)
     }
-}
-
-struct SearchResults {
-    let query: String
-    let media: [GPHMedia]
 }
