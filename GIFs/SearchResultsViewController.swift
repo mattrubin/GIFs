@@ -89,6 +89,7 @@ class SearchResultsViewController: UICollectionViewController {
             return
         }
         let detailViewController = DetailViewController(media: media)
+        detailViewController.modalTransitionStyle = .crossDissolve
         present(detailViewController, animated: true)
     }
 }
