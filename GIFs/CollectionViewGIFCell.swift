@@ -17,6 +17,9 @@ class CollectionViewGIFCell: UICollectionViewCell {
 
         contentView.backgroundColor = UIColor(white: 0.15, alpha: 1)
         contentView.addSubview(imageView)
+
+        // Scale the image to fill the view, clipping the image if the aspect ratios do not match.
+        imageView.contentMode = .scaleAspectFill
     }
 
     required init?(coder aDecoder: NSCoder) {
