@@ -1,1 +1,2 @@
 github "Giphy/giphy-ios-sdk-core" "1.4.0"
+github "ibireme/YYWebImage" "1.0.5"

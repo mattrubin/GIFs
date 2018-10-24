@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AVFoundation
 import GiphyCoreSDK
 
 /// The number of images to load per request.
@@ -83,7 +82,7 @@ class SearchResultsViewController: UICollectionViewController {
         super.viewDidLoad()
 
         // Register cell classes
-        collectionView.register(CollectionViewVideoCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.register(CollectionViewGIFCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         collectionView.alwaysBounceVertical = true
         collectionView.indicatorStyle = .white
@@ -117,12 +116,11 @@ class SearchResultsViewController: UICollectionViewController {
             return cell
         }
 
-        if let videoCell = cell as? CollectionViewVideoCell {
-            if let previewImage = media.images?.preview,
-                let urlString = previewImage.mp4Url,
+        if let gifCell = cell as? CollectionViewGIFCell {
+            if let previewImage = media.images?.fixedWidth,
+                let urlString = previewImage.gifUrl,
                 let url = URL(string: urlString) {
-                let asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
-                videoCell.setAsset(asset)
+                gifCell.setImageURL(url)
             }
         }
 
@@ -130,18 +128,6 @@ class SearchResultsViewController: UICollectionViewController {
     }
 
     // MARK: UICollectionViewDelegate
-
-    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let videoCell = cell as? CollectionViewVideoCell {
-            videoCell.play()
-        }
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let videoCell = cell as? CollectionViewVideoCell {
-            videoCell.pause()
-        }
-    }
 
     /*
     // Uncomment this method to specify if the specified item should be highlighted during tracking
