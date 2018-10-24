@@ -16,7 +16,7 @@ private let reuseIdentifier = "Cell"
 
 class SearchResultsViewController: UICollectionViewController {
     var searchOperationInProgress: Operation?
-    var searchResults: [GPHMedia]?
+    var searchResults: SearchResults?
 
     init() {
         let layout = CollectionViewMasonryLayout()
@@ -30,9 +30,15 @@ class SearchResultsViewController: UICollectionViewController {
     // MARK: - Search
 
     func search(for query: String) {
-        print("Searching for \"\(query)\"...")
         discardSearchOperationInProgress()
 
+        if searchResults?.query == query {
+            // If the requested query matches the query of the already-loaded results, no API call is necessary.
+            print("Already showing results for \"\(query)\".")
+            return
+        }
+
+        print("Searching for \"\(query)\"...")
         searchOperationInProgress = GiphyCore.shared.search(query, limit: pageSize) { [weak self] (response, error) in
             if let error = error as NSError? {
                 // TODO: Better error handling.
@@ -43,7 +49,8 @@ class SearchResultsViewController: UICollectionViewController {
                 // TODO: Check reponse metadata?
                 // TODO: Implement reponse pagination?
                 DispatchQueue.main.async {
-                    self?.update(with: data)
+                    let searchResults = SearchResults(query: query, media: data)
+                    self?.update(with: searchResults)
                 }
             } else {
                 // TODO: Display a "no results" state in the UI.
@@ -53,11 +60,13 @@ class SearchResultsViewController: UICollectionViewController {
     }
 
     func clearResults() {
-        print("Clearing search results...")
         discardSearchOperationInProgress()
 
-        self.searchResults = nil
-        self.collectionView.reloadData() // TODO: Use a more elegant update method.
+        if searchResults != nil {
+            print("Clearing search results...")
+            self.searchResults = nil
+            self.collectionView.reloadData() // TODO: Use a more elegant update method.
+        }
     }
 
     private func discardSearchOperationInProgress() {
@@ -70,8 +79,8 @@ class SearchResultsViewController: UICollectionViewController {
         }
     }
 
-    private func update(with searchResults: [GPHMedia]) {
-        print("Found \(searchResults.count) search results.")
+    private func update(with searchResults: SearchResults) {
+        print("Found \(searchResults.media.count) search results.")
         self.searchResults = searchResults
         self.collectionView.reloadData() // TODO: Use a more elegant update method.
     }
@@ -106,13 +115,13 @@ class SearchResultsViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return searchResults?.count ?? 0
+        return searchResults?.media.count ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
 
-        guard let media = searchResults?[indexPath.item] else {
+        guard let media = searchResults?.media[indexPath.item] else {
             // Cannot configure a cell for an item that doesn't exist.
             return cell
         }
@@ -163,11 +172,16 @@ class SearchResultsViewController: UICollectionViewController {
 
 extension SearchResultsViewController: CollectionViewMasonryLayoutDataSource {
     func originalSizeOfItem(at indexPath: IndexPath) -> CGSize {
-        guard let media = searchResults?[indexPath.item],
+        guard let media = searchResults?.media[indexPath.item],
             let originalImage = media.images?.original else {
                 return .zero
         }
 
         return CGSize(width: originalImage.width, height: originalImage.height)
     }
+}
+
+struct SearchResults {
+    let query: String
+    let media: [GPHMedia]
 }
