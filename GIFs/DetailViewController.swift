@@ -30,21 +30,32 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
 
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
+
         imageView.contentMode = .scaleAspectFit
         if let imageURLString = media.images?.original?.gifUrl, let imageURL = URL(string: imageURLString) {
-            imageView.yy_setImage(with: imageURL, options: .setImageWithFadeAnimation)
+            let options = YYWebImageOptions.setImageWithFadeAnimation
+            imageView.yy_setImage(with: imageURL, placeholder: nil, options: options) { (_, _, _, _, _) in
+                activityIndicator.stopAnimating()
+            }
         } else {
             // TODO: Recover from this error?
             print("ERROR: Failed to create URL for media.")
         }
 
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(activityIndicator)
         view.addSubview(imageView)
         view.addConstraints([
             imageView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
+            activityIndicator.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
         ])
     }
 
