@@ -38,6 +38,7 @@ class DetailViewController: UIViewController {
         if let imageURLString = media.images?.original?.gifUrl, let imageURL = URL(string: imageURLString) {
             let options = YYWebImageOptions.setImageWithFadeAnimation
             imageView.yy_setImage(with: imageURL, placeholder: nil, options: options) { (_, _, _, _, _) in
+                // When the image has finshed loading, hide the activity indicator.
                 activityIndicator.stopAnimating()
             }
         } else {
