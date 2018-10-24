@@ -64,7 +64,9 @@ class GiphySearchController {
         print("Searching for \"\(query)\"...")
         let searchOperation = GiphyCore.shared.search(query, limit: pageSize) { [weak self] (response, error) in
             // Recover a strong reference to self, or abort.
-            guard let self = self else { return }
+            guard let self = self else {
+                return
+            }
 
             // Before processing any search results, guard against race conditions and operation cancellation mistakes
             // by ensuring that this completion block is being called for the current search-in-progress. This can be
