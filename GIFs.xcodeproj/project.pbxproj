@@ -17,6 +17,7 @@
 		C90987E1217FC04F0002128D /* CollectionViewMasonryLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90987E0217FC04F0002128D /* CollectionViewMasonryLayout.swift */; };
 		C90987E7217FEBA70002128D /* YYWebImage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C90987E5217FEA400002128D /* YYWebImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C90987E921800A1B0002128D /* GiphySearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90987E821800A1B0002128D /* GiphySearchController.swift */; };
+		C90987EB21801E360002128D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90987EA21801E360002128D /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,6 +50,7 @@
 		C90987E0217FC04F0002128D /* CollectionViewMasonryLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewMasonryLayout.swift; sourceTree = "<group>"; };
 		C90987E5217FEA400002128D /* YYWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YYWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C90987E821800A1B0002128D /* GiphySearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphySearchController.swift; sourceTree = "<group>"; };
+		C90987EA21801E360002128D /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 				C90987D1217FAE420002128D /* SearchResultsViewController.swift */,
 				C90987DE217FB6540002128D /* CollectionViewGIFCell.swift */,
 				C90987E0217FC04F0002128D /* CollectionViewMasonryLayout.swift */,
+				C90987EA21801E360002128D /* DetailViewController.swift */,
 				C90987C1217FAAC80002128D /* Assets.xcassets */,
 				C90987C3217FAAC80002128D /* LaunchScreen.storyboard */,
 				C90987C6217FAAC80002128D /* Info.plist */,
@@ -213,6 +216,7 @@
 				C90987D2217FAE420002128D /* SearchResultsViewController.swift in Sources */,
 				C90987DF217FB6540002128D /* CollectionViewGIFCell.swift in Sources */,
 				C90987BB217FAAC80002128D /* AppDelegate.swift in Sources */,
+				C90987EB21801E360002128D /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
