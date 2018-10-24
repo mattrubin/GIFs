@@ -15,7 +15,7 @@ private let pageSize = 100
 private let reuseIdentifier = "Cell"
 
 class SearchResultsViewController: UICollectionViewController {
-    var searchOperationInProgress: Operation?
+    var searchInProgress: (query: String, operation: Operation)?
     var searchResults: SearchResults?
 
     init() {
@@ -30,7 +30,12 @@ class SearchResultsViewController: UICollectionViewController {
     // MARK: - Search
 
     func search(for query: String) {
-        discardSearchOperationInProgress()
+        if searchInProgress?.query == query {
+            // If the requested query matches the query of the in-progress search results, no changes are necessary.
+            print("Already searching for \"\(query)\".")
+            return
+        }
+        discardSearchInProgress()
 
         if searchResults?.query == query {
             // If the requested query matches the query of the already-loaded results, no API call is necessary.
@@ -39,7 +44,7 @@ class SearchResultsViewController: UICollectionViewController {
         }
 
         print("Searching for \"\(query)\"...")
-        searchOperationInProgress = GiphyCore.shared.search(query, limit: pageSize) { [weak self] (response, error) in
+        let searchOperation = GiphyCore.shared.search(query, limit: pageSize) { [weak self] (response, error) in
             if let error = error as NSError? {
                 // TODO: Better error handling.
                 print("error: \(error)")
@@ -57,10 +62,11 @@ class SearchResultsViewController: UICollectionViewController {
                 print("No Results Found")
             }
         }
+        searchInProgress = (query: query, operation: searchOperation)
     }
 
     func clearResults() {
-        discardSearchOperationInProgress()
+        discardSearchInProgress()
 
         if searchResults != nil {
             print("Clearing search results...")
@@ -69,13 +75,13 @@ class SearchResultsViewController: UICollectionViewController {
         }
     }
 
-    private func discardSearchOperationInProgress() {
-        if let opInProgress = searchOperationInProgress {
-            if !opInProgress.isFinished {
+    private func discardSearchInProgress() {
+        if let operationInProgress = searchInProgress?.operation {
+            if !operationInProgress.isFinished {
                 print("Cancelling previous search...")
-                opInProgress.cancel()
+                operationInProgress.cancel()
             }
-            searchOperationInProgress = nil
+            searchInProgress = nil
         }
     }
 
