@@ -23,8 +23,11 @@ protocol GiphySearchControllerDelegate: class {
     /// Called when a search completes with results, which the delegate should display.
     func update(with searchResults: SearchResults)
 
-    /// Called when the search is cleared. The delegate should discard any displayed search results.
-    func clearSearchResults()
+    /// Called when a search completes with an error, which the delegate should display.
+    func update(withErrorMessage errorMessage: String)
+
+    /// Called when the search is cleared. The delegate should discard any displayed search results or error messages.
+    func clear()
 }
 
 /// An object which creates and manages search requests to the Giphy API.
@@ -93,7 +96,7 @@ class GiphySearchController {
     func clearSearch() {
         discardSearchInProgress()
         latestSearchResults = nil
-        self.delegate?.clearSearchResults()
+        self.delegate?.clear()
     }
 
     // MARK: Private
@@ -112,12 +115,15 @@ class GiphySearchController {
 
     /// Processes the search results (or error) and updates the delegate.
     private func handleCompletedSearch(query: String, response: GPHListMediaResponse?, error: Error?) {
-        if let error = error as NSError? {
-            // TODO: Better error handling.
-            print("error: \(error)")
-        }
-
-        if let response = response, let data = response.data, let pagination = response.pagination {
+        if let error = error {
+            // Unfortunately, when an error occurs, the GiphyCoreSDK returns only an Error object with strings that are
+            // not tailored for display to the user, and it does not return a GPHMeta object from which we can extract
+            // failure status codes. Without a useful specific error message, show a generic one.
+            DispatchQueue.main.async {
+                print("ERROR: \(error)")
+                self.delegate?.update(withErrorMessage: "🤕 Something went wrong.")
+            }
+        } else if let response = response, let data = response.data, let pagination = response.pagination {
             // TODO: Check reponse metadata?
             // TODO: Implement reponse pagination?
             DispatchQueue.main.async {
@@ -126,8 +132,11 @@ class GiphySearchController {
                 self.delegate?.update(with: searchResults)
             }
         } else {
-            // TODO: Display a "no results" state in the UI.
-            print("No Results Found")
+            // If the API call didn't return an error, and also didn't return a response object with useable data, then
+            // show a generic error message.
+            DispatchQueue.main.async {
+                self.delegate?.update(withErrorMessage: "🤔 Something went wrong.")
+            }
         }
     }
 }

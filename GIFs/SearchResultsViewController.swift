@@ -13,6 +13,8 @@ private let reuseIdentifier = "Cell"
 class SearchResultsViewController: UICollectionViewController {
     var searchResults: SearchResults?
 
+    lazy var errorMessageLabel = UILabel()
+
     init() {
         let layout = CollectionViewMasonryLayout()
         super.init(collectionViewLayout: layout)
@@ -20,22 +22,6 @@ class SearchResultsViewController: UICollectionViewController {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-
-    // MARK: - Search
-
-    func clearSearchResults() {
-        if searchResults != nil {
-            print("Clearing search results...")
-            self.searchResults = nil
-            self.collectionView.reloadData() // TODO: Use a more elegant update method.
-        }
-    }
-
-    func update(with searchResults: SearchResults) {
-        print("Found \(searchResults.media.count) search results.")
-        self.searchResults = searchResults
-        self.collectionView.reloadData() // TODO: Use a more elegant update method.
     }
 
     // MARK: - View Lifecycle
@@ -49,6 +35,21 @@ class SearchResultsViewController: UICollectionViewController {
         collectionView.alwaysBounceVertical = true
         collectionView.indicatorStyle = .white
         collectionView.keyboardDismissMode = .onDrag
+
+        // Initially hide the error message label.
+        errorMessageLabel.isHidden = true
+        errorMessageLabel.textColor = .white
+        errorMessageLabel.textAlignment = .center
+
+        // Center the error message in the top half of the view, to avoid the keyboard.
+        errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(errorMessageLabel)
+        view.addConstraints([
+            errorMessageLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            errorMessageLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+            errorMessageLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            errorMessageLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor),
+        ])
     }
 
     // MARK: UICollectionViewDataSource
@@ -93,7 +94,38 @@ class SearchResultsViewController: UICollectionViewController {
 }
 
 extension SearchResultsViewController: GiphySearchControllerDelegate {
+    func update(with searchResults: SearchResults) {
+        clearErrorMessage()
 
+        print("Found \(searchResults.media.count) search results.")
+        self.searchResults = searchResults
+        self.collectionView.reloadData() // TODO: Use a more elegant update method.
+    }
+
+    func update(withErrorMessage errorMessage: String) {
+        clearSearchResults()
+
+        errorMessageLabel.isHidden = false
+        errorMessageLabel.text = errorMessage
+    }
+
+    func clear() {
+        clearSearchResults()
+        clearErrorMessage()
+    }
+
+    private func clearSearchResults() {
+        if searchResults != nil {
+            print("Clearing search results...")
+            self.searchResults = nil
+            self.collectionView.reloadData() // TODO: Use a more elegant update method.
+        }
+    }
+
+    private func clearErrorMessage() {
+        errorMessageLabel.isHidden = true
+        errorMessageLabel.text = nil
+    }
 }
 
 extension SearchResultsViewController: CollectionViewMasonryLayoutDataSource {
