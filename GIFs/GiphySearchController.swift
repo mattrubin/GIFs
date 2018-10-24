@@ -124,9 +124,7 @@ class GiphySearchController {
             // failure status codes. Without a useful specific error message, show a generic one.
             print("ERROR: \(error)")
             self.delegate?.update(withErrorMessage: "🤕 Something went wrong.")
-        } else if let response = response, let data = response.data, let pagination = response.pagination {
-            // TODO: Check reponse metadata?
-            // TODO: Implement reponse pagination?
+        } else if let response = response, let data = response.data {
             let searchResults = SearchResults(query: query, media: data)
             self.latestSearchResults = searchResults
             self.delegate?.update(with: searchResults)

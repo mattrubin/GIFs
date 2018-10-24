@@ -100,7 +100,7 @@ extension SearchResultsViewController: GiphySearchControllerDelegate {
 
         print("Found \(searchResults.media.count) search results.")
         self.searchResults = searchResults
-        self.collectionView.reloadData() // TODO: Use a more elegant update method.
+        self.collectionView.reloadData()
     }
 
     func update(withErrorMessage errorMessage: String) {
@@ -119,7 +119,7 @@ extension SearchResultsViewController: GiphySearchControllerDelegate {
         if searchResults != nil {
             print("Clearing search results...")
             self.searchResults = nil
-            self.collectionView.reloadData() // TODO: Use a more elegant update method.
+            self.collectionView.reloadData()
         }
     }
 

@@ -42,7 +42,6 @@ class DetailViewController: UIViewController {
                 activityIndicator.stopAnimating()
             }
         } else {
-            // TODO: Recover from this error?
             print("ERROR: Failed to create URL for media.")
         }
 
